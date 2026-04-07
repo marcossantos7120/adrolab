@@ -135,6 +135,7 @@ hf auth login --force
 
 Grava episódios de demonstração para treinamento de IA. É necessário alterar os números seriais das câmeras e os IPs antes de executar:
 
+Nesta etapa é importante trocar atribuir à variável HF_USER seu nome de usuário no HuggingFaceHub. Outra maneira, é apenas trocar a variável e escrever diretamente no comando seu nome de usuário. Isso necessariamente deverá ser feito também nos passos de treinamento e também no de avaliação da sua política de treinamento.
 ```bash
 uv run lerobot-record \
     --robot.type=bi_widowxai_follower_robot \
