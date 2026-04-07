@@ -1,37 +1,92 @@
-# 🤖 Trossen Robotics - LeRobot Setup Guide (Stationary)
+# 🤖 Trossen Robotics — LeRobot Setup Guide (Stationary)
 
-Este guia fornece as instruções essenciais para configurar e operar braços robóticos da Trossen Robotics utilizando a biblioteca **LeRobot** da Hugging Face.
+> Instruções essenciais para configurar e operar braços robóticos da Trossen Robotics utilizando a biblioteca **LeRobot** da Hugging Face.
 
 ---
 
-## 🔑 1. Hugging Face Authentication
+## 📋 Índice
 
-A autenticação é necessária para baixar modelos pré-treinados e realizar o upload de seus próprios datasets.
+1. [Miniconda Setup](#-1-miniconda-setup)
+2. [Hugging Face Authentication](#-2-hugging-face-authentication)
+3. [Instalação e Setup (LeRobot)](#️-3-instalação-e-setup-lerobot)
+4. [Comandos de Operação](#️-4-comandos-de-operação)
+5. [Requisitos de Hardware](#️-5-requisitos-de-hardware-stationary)
 
-Para realizar o login:
+---
+
+## 🐍 1. Miniconda Setup
+
+O Miniconda é recomendado para isolar o ambiente Python do LeRobot e evitar conflitos de dependências.
+
+### 1.1 Instalar o Miniconda
+
+Baixe e execute o instalador para Linux:
+
+```bash
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+```
+
+Siga as instruções na tela e reinicie o terminal ao finalizar. Para verificar a instalação:
+
+```bash
+conda --version
+```
+
+### 1.2 Criar o Ambiente Virtual
+
+Crie um ambiente dedicado para o LeRobot com Python 3.10:
+
+```bash
+conda create -n lerobot python=3.10 -y
+```
+
+### 1.3 Ativar o Ambiente
+
+```bash
+conda activate lerobot
+```
+
+> **Importante:** Execute este comando sempre que abrir um novo terminal antes de usar o LeRobot.
+
+### 1.4 Desativar o Ambiente (quando necessário)
+
+```bash
+conda deactivate
+```
+
+---
+
+## 🔑 2. Hugging Face Authentication
+
+A autenticação é necessária para baixar modelos pré-treinados e realizar upload de datasets.
+
+Login padrão:
+
 ```bash
 hf auth login
 ```
 
-Caso precise forçar a reautenticação ou trocar de conta:
+Forçar reautenticação ou trocar de conta:
+
 ```bash
 hf auth login --force
 ```
 
 ---
 
-## 🛠️ 2. Instalação e Setup (LeRobot)
+## 🛠️ 3. Instalação e Setup (LeRobot)
 
-Para configurar o suporte aos braços Trossen (ViperX, WidowX, etc.), siga os passos abaixo:
+> Certifique-se de que o ambiente `lerobot` está ativo (`conda activate lerobot`) antes de prosseguir.
 
-### 1. Clonar o Repositório
+### 3.1 Clonar o Repositório
 
 ```bash
 git clone https://github.com/huggingface/lerobot.git
 cd lerobot
 ```
 
-### 2. Instalar Dependências
+### 3.2 Instalar Dependências
 
 Instale o pacote com o plugin específico para hardware Trossen:
 
@@ -39,17 +94,17 @@ Instale o pacote com o plugin específico para hardware Trossen:
 pip install -e ".[trossen]"
 ```
 
-### 3. Documentação de Referência
+### 3.3 Documentação de Referência
 
 Para detalhes avançados, consulte o [Tutorial Oficial da Trossen Robotics](https://github.com/huggingface/lerobot).
 
 ---
 
-## 🕹️ 3. Comandos de Operação
+## 🕹️ 4. Comandos de Operação
 
-### Testar Conexão e Teleoperação
+### 4.1 Testar Conexão e Teleoperação
 
-Use este comando para controlar o braço manualmente e validar a comunicação com os motores Dynamixel:
+Controla o braço manualmente e valida a comunicação com os motores Dynamixel:
 
 ```bash
 python lerobot/scripts/control_robot.py \
@@ -57,11 +112,11 @@ python lerobot/scripts/control_robot.py \
     --control-mode teleop
 ```
 
-> **Nota:** Substitua `vx250` pelo modelo específico do seu braço, ex: `wx250`, `vx300`.
+> **Nota:** Substitua `vx250` pelo modelo do seu braço — ex: `wx250`, `vx300`.
 
-### Gravação de Datasets
+### 4.2 Gravação de Datasets
 
-Para gravar episódios de demonstração para treinamento de IA:
+Grava episódios de demonstração para treinamento de IA:
 
 ```bash
 python lerobot/scripts/control_robot.py \
@@ -72,14 +127,13 @@ python lerobot/scripts/control_robot.py \
 
 ---
 
-## ⚠️ Requisitos de Hardware (Stationary)
+## ⚠️ 5. Requisitos de Hardware (Stationary)
 
-- **Conexão Serial:** O braço deve estar conectado via USB. Caso o sistema não reconheça, libere a porta no Linux:
-  ```bash
-  sudo chmod 666 /dev/ttyUSB0
-  ```
-- **Energia:** Certifique-se de que a fonte de 12V está conectada à placa controladora.
-- **Segurança:** Fixe a base do robô firmemente na mesa *(Stationary)* antes de iniciar movimentos de alta velocidade.
+| Item | Detalhe |
+|---|---|
+| **Conexão Serial** | Braço conectado via USB. Caso não reconhecido, libere a porta: `sudo chmod 666 /dev/ttyUSB0` |
+| **Energia** | Fonte de 12V conectada à placa controladora |
+| **Segurança** | Base do robô fixada firmemente na mesa antes de movimentos de alta velocidade |
 
 ---
 
