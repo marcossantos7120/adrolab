@@ -7,18 +7,19 @@
 ## 📋 Índice
 
 1. [Miniconda Setup](#-1-miniconda-setup)
-2. [Hugging Face Authentication](#-2-hugging-face-authentication)
-3. [Instalação e Setup (LeRobot)](#️-3-instalação-e-setup-lerobot)
-4. [Comandos de Operação](#️-4-comandos-de-operação)
-5. [Requisitos de Hardware](#️-5-requisitos-de-hardware-stationary)
+2. [Instalação e Setup (LeRobot)](#️-2-instalação-e-setup-lerobot)
+3. [Configurando Trossen AI](#️-3-configurando-trossen-ai)
+4. [Teleoperação](#️-4-teleoperação)
+5. [Hugging Face Authentication](#-5-hugging-face-authentication)
+6. [Gravação de Datasets](#-6-gravação-de-datasets)
+7. [Replay de Episódio](#-7-replay-de-episódio)
+8. [Treinamento e Avaliação](#-8-treinamento-e-avaliação)
 
 ---
 
 ## 🐍 1. Miniconda Setup
 
 O Miniconda é recomendado para isolar o ambiente Python do LeRobot e evitar conflitos de dependências.
-
-### 1.1 Instalar o Miniconda
 
 Baixe e execute o instalador para Linux:
 
@@ -33,79 +34,64 @@ Siga as instruções na tela e reinicie o terminal ao finalizar. Para verificar 
 conda --version
 ```
 
-### 1.2 Criar o Ambiente Virtual
-
-Crie um ambiente dedicado para o LeRobot com Python 3.10:
+Crie um ambiente dedicado para o LeRobot com Python 3.10 e ative-o:
 
 ```bash
 conda create -n lerobot python=3.10 -y
-```
-
-### 1.3 Ativar o Ambiente
-
-```bash
 conda activate lerobot
 ```
 
-> **Importante:** Execute este comando sempre que abrir um novo terminal antes de usar o LeRobot.
+> **Importante:** Execute `conda activate lerobot` sempre que abrir um novo terminal antes de usar o LeRobot.
 
-### 1.4 Desativar o Ambiente (quando necessário)
+---
 
-```bash
-conda deactivate
-```
-
-
-## 🛠️ 3. Instalação e Setup (LeRobot)
+## 🛠️ 2. Instalação e Setup (LeRobot)
 
 > Certifique-se de que o ambiente `lerobot` está ativo (`conda activate lerobot`) antes de prosseguir.
-Antes de prosseguir, faca a instalacao do uv:
+
+Antes de prosseguir, faça a instalação do `uv`:
+
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
-ou, se nao funcionar:
+
+Ou, se não funcionar:
 
 ```bash
 wget -qO- https://astral.sh/uv/install.sh | sh
 ```
 
-### 3.1 Clonar o Repositório
+Clone o repositório e instale os pacotes:
 
 ```bash
 git clone https://github.com/huggingface/lerobot.git
 cd lerobot
 ```
 
-### 3.2 Instalar os pacotes do lerobot e as suas dependencias
-
 ```bash
 cd ~/lerobot_trossen
 uv sync
 ```
-Para verificar a instalacao, faca:
+
+Para verificar a instalação:
+
 ```bash
-cd ~/lerobot_trossen
 uv pip list | grep lerobot
 ```
 
-## ⚙️ 4. Configurando Trossen AI
+---
 
-Nesta etapa, é essencial configurar os arquivos do LeRobot para que as câmeras sejam conectadas. Além disso, essa etapa garante a conexão correta dos braços do Stationary.
+## ⚙️ 3. Configurando Trossen AI
 
-### 4.1 Editando o arquivo `configs.py`
+Nesta etapa, é essencial configurar os arquivos do LeRobot para que as câmeras sejam conectadas e para garantir a conexão correta dos braços do Stationary.
 
-Navegue até o seguinte caminho dentro do repositório clonado:
+Navegue até o arquivo de configuração:
 
-```bash
+```
 lerobot/common/robot_devices/robots/configs.py
 ```
 
-
-### 4.2 Configurando os IPs (Leader/Follower)
-
-No arquivo `configs.py`, localize os campos correspondentes a cada braço e configure o endereço IP correto para cada **Leader** e **Follower**.
-
-### 4.3 Configurando as Câmeras RealSense
+No arquivo `configs.py`, configure o endereço IP correto para cada **Leader** e **Follower**, e insira o número serial de cada câmera RealSense no campo correspondente.
 
 Para verificar o número serial de cada câmera, execute:
 
@@ -113,67 +99,119 @@ Para verificar o número serial de cada câmera, execute:
 realsense-viewer
 ```
 
-No mesmo arquivo `configs.py`, insira o número serial encontrado para cada câmera no campo correspondente.
+---
 
+## 🕹️ 4. Teleoperação
 
+Se a configuração ocorreu corretamente, será possível teleoperar o Stationary com o comando abaixo:
 
-## 🕹️ 5. Teleoperacao 
-
-Nesta etapa, teste. Se a configuração ocorreu corretamente será possível teleoperar o Stationary
 ```bash
 python lerobot/scripts/control_robot.py \
     --robot.type=trossen_ai_stationary \
     --robot.max_relative_target=5
 ```
 
-
-### 5.1 Testar Conexão e Teleoperação
-
-Controla o braço manualmente e valida a comunicação com os motores Dynamixel:
-
-```bash
-python lerobot/scripts/control_robot.py \
-    --robot-path lerobot/configs/robot/trossen_vx250.yaml \
-    --control-mode teleop
-```
-
-> **Nota:** Substitua `vx250` pelo modelo do seu braço — ex: `wx250`, `vx300`.
-
-### 5.2 Gravação de Datasets
-
-Grava episódios de demonstração para treinamento de IA:
-
-```bash
-python lerobot/scripts/control_robot.py \
-    --robot-path lerobot/configs/robot/trossen_vx250.yaml \
-    --control-mode teleop \
-    --save-episodes true
-```
-
 ---
 
-## 🔑 2. Hugging Face Authentication
+## 🔑 5. Hugging Face Authentication
 
 A autenticação é necessária para baixar modelos pré-treinados e realizar upload de datasets.
-
-Login padrão:
 
 ```bash
 hf auth login
 ```
 
-Forçar reautenticação ou trocar de conta:
+Caso precise forçar a reautenticação ou trocar de conta:
 
 ```bash
 hf auth login --force
 ```
-## ⚠️ 5. Requisitos de Hardware (Stationary)
 
-| Item | Detalhe |
-|---|---|
-| **Conexão Serial** | Braço conectado via USB. Caso não reconhecido, libere a porta: `sudo chmod 666 /dev/ttyUSB0` |
-| **Energia** | Fonte de 12V conectada à placa controladora |
-| **Segurança** | Base do robô fixada firmemente na mesa antes de movimentos de alta velocidade |
+> **Importante:** Ao criar um token, certifique-se de que ele possui no mínimo permissões de **WRITE**.
+
+---
+
+## 💾 6. Gravação de Datasets
+
+Grava episódios de demonstração para treinamento de IA. É necessário alterar os números seriais das câmeras e os IPs antes de executar:
+
+```bash
+uv run lerobot-record \
+    --robot.type=bi_widowxai_follower_robot \
+    --robot.left_arm_ip_address=192.168.1.5 \
+    --robot.right_arm_ip_address=192.168.1.4 \
+    --robot.id=bimanual_follower \
+    --robot.cameras='{
+    cam_high: {"type": "intelrealsense", "serial_number_or_name": "0123456789", "width": 640, "height": 480, "fps": 30},
+    cam_low: {"type": "intelrealsense", "serial_number_or_name": "0123456789", "width": 640, "height": 480, "fps": 30},
+    cam_left_wrist: {"type": "intelrealsense", "serial_number_or_name": "0123456789", "width": 640, "height": 480, "fps": 30},
+    cam_right_wrist: {"type": "intelrealsense", "serial_number_or_name": "0123456789", "width": 640, "height": 480, "fps": 30},
+    }' \
+    --teleop.type=bi_widowxai_leader_teleop \
+    --teleop.left_arm_ip_address=192.168.1.3 \
+    --teleop.right_arm_ip_address=192.168.1.2 \
+    --teleop.id=bimanual_leader \
+    --display_data=true \
+    --dataset.repo_id=${HF_USER}/bimanual-widowxai-handover-cube \
+    --dataset.episode_time_s=60 \
+    --dataset.reset_time_s=15 \
+    --dataset.num_episodes=2 \
+    --dataset.push_to_hub=true \
+    --dataset.single_task="Grab and handover the red cube to the other arm" \
+    --dataset.num_image_writer_threads_per_camera=8 \
+    --display_data=false
+```
+
+---
+
+## 🔁 7. Replay de Episódio
+
+```bash
+uv run lerobot-replay \
+    --robot.type=bi_widowxai_follower_robot \
+    --robot.left_arm_ip_address=192.168.1.5 \
+    --robot.right_arm_ip_address=192.168.1.4 \
+    --robot.id=bimanual_follower \
+    --dataset.repo_id=${HF_USER}/<dataset-id> \
+    --dataset.episode=0
+```
+
+---
+
+## 🧠 8. Treinamento e Avaliação
+
+### Executando o Treinamento
+
+```bash
+uv run lerobot-train \
+    --dataset.repo_id=${HF_USER}/trossen_ai_stationary_test \
+    --policy.type=act \
+    --output_dir=outputs/train/act_trossen_ai_stationary_test \
+    --job_name=act_trossen_ai_stationary_test \
+    --policy.device=cuda \
+    --wandb.enable=true \
+    --policy.repo_id=${HF_USER}/my_policy
+```
+
+### Avaliando a Política de Treinamento
+
+```bash
+uv run lerobot-record \
+    --robot.type=bi_widowxai_follower_robot \
+    --robot.left_arm_ip_address=192.168.1.5 \
+    --robot.right_arm_ip_address=192.168.1.4 \
+    --robot.id=bimanual_follower \
+    --robot.cameras='{
+        cam_high: {type: intelrealsense, serial_number_or_name: "0123456789", width: 640, height: 480, fps: 30},
+        cam_low: {type: intelrealsense, serial_number_or_name: "0123456789", width: 640, height: 480, fps: 30},
+        cam_left_wrist: {type: intelrealsense, serial_number_or_name: "0123456789", width: 640, height: 480, fps: 30},
+        cam_right_wrist: {type: intelrealsense, serial_number_or_name: "0123456789", width: 640, height: 480, fps: 30}
+        }' \
+    --display_data=false \
+    --dataset.repo_id=${HF_USER}/eval_trossen_ai_stationary_test \
+    --dataset.single_task="Grab and handover the red cube to the other arm" \
+    --policy.path=${HF_USER}/my_policy
+```
 
 ---
 
