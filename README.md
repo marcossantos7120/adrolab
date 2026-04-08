@@ -57,11 +57,9 @@ git clone -b trossen-ai https://github.com/Interbotix/lerobot.git ~/lerobot
 ```bash
 cd ~/lerobot && pip install --no-binary=av -e ".[trossen_ai]"
 ```
-
-Para verificar a instalação:
-
+Instalando dependencias extras  que serao necessarias futuramente:
 ```bash
-uv pip list | grep lerobot
+conda install -y -c conda-forge 'ffmpeg>=7.0'
 ```
 
 ---
