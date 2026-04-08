@@ -48,27 +48,14 @@ conda create -y -n lerobot python=3.10 && conda activate lerobot
 
 > Certifique-se de que o ambiente `lerobot` está ativo (`conda activate lerobot`) antes de prosseguir.
 
-Antes de prosseguir, faça a instalação do `uv`:
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-Ou, se não funcionar:
-
-```bash
-wget -qO- https://astral.sh/uv/install.sh | sh
-```
-
 Clone o repositório e instale os pacotes:
 
 ```bash
 git clone -b trossen-ai https://github.com/Interbotix/lerobot.git ~/lerobot
-cd lerobot
 ```
 
 ```bash
-
+cd ~/lerobot && pip install --no-binary=av -e ".[trossen_ai]"
 ```
 
 Para verificar a instalação:
