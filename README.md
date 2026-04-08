@@ -138,30 +138,19 @@ Grava episódios de demonstração para treinamento de IA. É necessário altera
 
 Nesta etapa é importante trocar atribuir à variável HF_USER seu nome de usuário no HuggingFaceHub. Outra maneira, é apenas trocar a variável e escrever diretamente no comando seu nome de usuário. Isso necessariamente deverá ser feito também nos passos de treinamento e também no de avaliação da sua política de treinamento.
 ```bash
-uv run lerobot-record \
-    --robot.type=bi_widowxai_follower_robot \
-    --robot.left_arm_ip_address=192.168.1.5 \
-    --robot.right_arm_ip_address=192.168.1.4 \
-    --robot.id=bimanual_follower \
-    --robot.cameras='{
-    cam_high: {"type": "intelrealsense", "serial_number_or_name": "0123456789", "width": 640, "height": 480, "fps": 30},
-    cam_low: {"type": "intelrealsense", "serial_number_or_name": "0123456789", "width": 640, "height": 480, "fps": 30},
-    cam_left_wrist: {"type": "intelrealsense", "serial_number_or_name": "0123456789", "width": 640, "height": 480, "fps": 30},
-    cam_right_wrist: {"type": "intelrealsense", "serial_number_or_name": "0123456789", "width": 640, "height": 480, "fps": 30},
-    }' \
-    --teleop.type=bi_widowxai_leader_teleop \
-    --teleop.left_arm_ip_address=192.168.1.3 \
-    --teleop.right_arm_ip_address=192.168.1.2 \
-    --teleop.id=bimanual_leader \
-    --display_data=true \
-    --dataset.repo_id=${HF_USER}/bimanual-widowxai-handover-cube \
-    --dataset.episode_time_s=60 \
-    --dataset.reset_time_s=15 \
-    --dataset.num_episodes=2 \
-    --dataset.push_to_hub=true \
-    --dataset.single_task="Grab and handover the red cube to the other arm" \
-    --dataset.num_image_writer_threads_per_camera=8 \
-    --display_data=false
+python lerobot/scripts/control_robot.py \
+    --robot.type=trossen_ai_stationary \
+    --robot.max_relative_target=null \
+    --control.type=record \
+    --control.fps=30 \
+    --control.single_task="Test recording episode using Trossen AI Stationary." \
+    --control.repo_id=${HF_USER}/trossen_ai_stationary_test \
+    --control.tags='["tutorial"]' \
+    --control.warmup_time_s=5 \
+    --control.episode_time_s=30 \
+    --control.reset_time_s=30 \
+    --control.num_episodes=2 \
+    --control.push_to_hub=true
 ```
 
 ---
@@ -185,34 +174,32 @@ uv run lerobot-replay \
 ### Executando o Treinamento
 
 ```bash
-uv run lerobot-train \
+python lerobot/scripts/train.py \
     --dataset.repo_id=${HF_USER}/trossen_ai_stationary_test \
     --policy.type=act \
     --output_dir=outputs/train/act_trossen_ai_stationary_test \
     --job_name=act_trossen_ai_stationary_test \
-    --policy.device=cuda \
-    --wandb.enable=true \
-    --policy.repo_id=${HF_USER}/my_policy
+    --device=cuda \
+    --wandb.enable=true
 ```
 
 ### Avaliando a Política de Treinamento
 
 ```bash
-uv run lerobot-record \
-    --robot.type=bi_widowxai_follower_robot \
-    --robot.left_arm_ip_address=192.168.1.5 \
-    --robot.right_arm_ip_address=192.168.1.4 \
-    --robot.id=bimanual_follower \
-    --robot.cameras='{
-        cam_high: {type: intelrealsense, serial_number_or_name: "0123456789", width: 640, height: 480, fps: 30},
-        cam_low: {type: intelrealsense, serial_number_or_name: "0123456789", width: 640, height: 480, fps: 30},
-        cam_left_wrist: {type: intelrealsense, serial_number_or_name: "0123456789", width: 640, height: 480, fps: 30},
-        cam_right_wrist: {type: intelrealsense, serial_number_or_name: "0123456789", width: 640, height: 480, fps: 30}
-        }' \
-    --display_data=false \
-    --dataset.repo_id=${HF_USER}/eval_trossen_ai_stationary_test \
-    --dataset.single_task="Grab and handover the red cube to the other arm" \
-    --policy.path=${HF_USER}/my_policy
+python lerobot/scripts/control_robot.py \
+    --robot.type=trossen_ai_stationary \
+    --control.type=record \
+    --control.fps=30 \
+    --control.single_task="Recording evaluation episode using Trossen AI Stationary." \
+    --control.repo_id=${HF_USER}/eval_act_trossen_ai_stationary_test \
+    --control.tags='["tutorial"]' \
+    --control.warmup_time_s=5 \
+    --control.episode_time_s=30 \
+    --control.reset_time_s=30 \
+    --control.num_episodes=10 \
+    --control.push_to_hub=true \
+    --control.policy.path=outputs/train/act_trossen_ai_stationary_test/checkpoints/last/pretrained_model \
+    --control.num_image_writer_processes=1
 ```
 
 ---
