@@ -37,8 +37,7 @@ conda --version
 Crie um ambiente dedicado para o LeRobot com Python 3.10 e ative-o:
 
 ```bash
-conda create -n lerobot python=3.10 -y
-conda activate lerobot
+conda create -y -n lerobot python=3.10 && conda activate lerobot
 ```
 
 > **Importante:** Execute `conda activate lerobot` sempre que abrir um novo terminal antes de usar o LeRobot.
@@ -69,8 +68,7 @@ cd lerobot
 ```
 
 ```bash
-cd ~/lerobot_trossen
-uv sync
+
 ```
 
 Para verificar a instalação:
