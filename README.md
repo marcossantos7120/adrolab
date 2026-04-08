@@ -106,7 +106,10 @@ python lerobot/scripts/control_robot.py \
 ---
 
 ## 🔑 5. Hugging Face Authentication
-
+Primeiro, e necessario baixar os pacotes do Hugging Face Hub:
+```bash
+pip install --upgrade huggingface_hub
+```
 A autenticação é necessária para baixar modelos pré-treinados e realizar upload de datasets.
 
 ```bash
