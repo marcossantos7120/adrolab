@@ -130,6 +130,26 @@ hf auth login --force
 
 > **Importante:** Ao criar um token, certifique-se de que ele possui no mínimo permissões de **WRITE**.
 
+Caso seja necessario trocar de token, é necessário utilizar:
+```bash
+hf auth switch
+```
+
+Para baixar arquivos do Hugging Face Hub, é necessário utilizar a função hf_hub_download(). Aqui segue um exemplo para baixar o modelo Pegasus que está na página do tutorial do  Hugging Face Hub:
+```bash
+from huggingface_hub import hf_hub_download
+hf_hub_download(repo_id="google/pegasus-xsum", filename="config.json")
+```
+Ou, para baixar uma versao especifica, utilize
+```bash
+from huggingface_hub import hf_hub_download
+hf_hub_download(
+    repo_id="google/pegasus-xsum",
+    filename="config.json",
+    revision="4d33b01d79672f27f001f6abade33f22d993b151"
+)
+```
+Para mais detalhes consultar https://huggingface.co/docs/huggingface_hub/quick-start e procurar pela API de hf_hub_download().
 ---
 
 ## 💾 6. Gravação de Datasets
