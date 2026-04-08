@@ -61,6 +61,14 @@ Instalando dependencias extras  que serao necessarias futuramente:
 ```bash
 conda install -y -c conda-forge 'ffmpeg>=7.0'
 ```
+Para verificar instalacao faca:
+
+```bash
+which ffmpeg
+```
+Assim, tambem e possivel verificar qual versao foi instalada. Segundo o tutorial da Trossen AI, e preferivel uma versao superior a 7.0
+
+
 
 ---
 
