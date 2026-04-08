@@ -108,7 +108,8 @@ Se a configuração ocorreu corretamente, será possível teleoperar o Stationar
 ```bash
 python lerobot/scripts/control_robot.py \
     --robot.type=trossen_ai_stationary \
-    --robot.max_relative_target=5
+    --robot.max_relative_target=5 \
+    --control.type=teleoperate
 ```
 
 ---
