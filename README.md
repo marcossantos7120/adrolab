@@ -64,7 +64,7 @@ wget -qO- https://astral.sh/uv/install.sh | sh
 Clone o repositório e instale os pacotes:
 
 ```bash
-git clone https://github.com/huggingface/lerobot.git
+git clone -b trossen-ai https://github.com/Interbotix/lerobot.git ~/lerobot
 cd lerobot
 ```
 
