@@ -68,7 +68,10 @@ which ffmpeg
 ```
 Assim, tambem e possivel verificar qual versao foi instalada. Segundo o tutorial da Trossen AI, e preferivel uma versao superior a 7.0
 
-
+Antes de seguir para as proximas etapas, certifique-se de que o ambiente conda esta ativado:
+```bash
+conda activate lerobot
+```
 
 ---
 
